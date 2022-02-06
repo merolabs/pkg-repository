@@ -28,7 +28,7 @@ for repo in $(ls -A ${CONF_DIR}/); do
 
           ${SCRIPT_DIR}/build.sh ${repo} ${os_name} ${dist} ${row}
 
-	  [ -d "${SCRIPT_DIR}/hook-after-build.d/"] && {
+	  [ -d "${SCRIPT_DIR}/hook-after-build.d/" ] && {
             export REPOSITORY=${repo}
 	    export OS_NAME=${os_name}
 	    export DISTRIBUTIVE=${dist}
