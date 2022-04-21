@@ -17,25 +17,25 @@ for repo in $(ls -A ${CONF_DIR}/); do
         check_mkdir "${INCOMING_DIR}/${repo}/${os_name}/${dist}/${row}"
 
         if [ "x$(ls -A ${INCOMING_DIR}/${repo}/${os_name}/${dist}/${row}/ | grep '.deb' | wc -l)" != "x0" ]; then
-	  [ -d "${SCRIPT_DIR}/hook-before-build.d/" ] && {
+          [ -d "${SCRIPT_DIR}/hook-before-build.d/" ] && {
             export REPOSITORY=${repo}
-	    export OS_NAME=${os_name}
-	    export DISTRIBUTIVE=${dist}
-	    export COMPONENT=${row}
-	    export CONFIG_DIR=${CONF_DIR}
-	    run-parts --regex '.*sh$' ${SCRIPT_DIR}/hook-before-build.d/
-	  }
+            export OS_NAME=${os_name}
+            export DISTRIBUTIVE=${dist}
+            export COMPONENT=${row}
+            export CONFIG_DIR=${CONF_DIR}
+            run-parts --regex '.*sh$' ${SCRIPT_DIR}/hook-before-build.d/
+          }
 
           ${SCRIPT_DIR}/build.sh ${repo} ${os_name} ${dist} ${row}
 
-	  [ -d "${SCRIPT_DIR}/hook-after-build.d/" ] && {
+          [ -d "${SCRIPT_DIR}/hook-after-build.d/" ] && {
             export REPOSITORY=${repo}
-	    export OS_NAME=${os_name}
-	    export DISTRIBUTIVE=${dist}
-	    export COMPONENT=${row}
-	    export CONFIG_DIR=${CONF_DIR}
-	    run-parts --regex '.*sh$' ${SCRIPT_DIR}/hook-after-build.d/
-	  }
+            export OS_NAME=${os_name}
+            export DISTRIBUTIVE=${dist}
+            export COMPONENT=${row}
+            export CONFIG_DIR=${CONF_DIR}
+            run-parts --regex '.*sh$' ${SCRIPT_DIR}/hook-after-build.d/
+          }
         fi
       done
     done
