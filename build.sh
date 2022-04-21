@@ -30,6 +30,7 @@ trap cleanup EXIT
 }
 
 [ -z "${ARCH}" ] && die_var_unset 'ARCH'
+[ -z "${PASSWORD}" ] && die_var_unset 'PASSWORD'
 
 repo_root_dir="${PUBLIC_DIR}/${REPO}/${OS_NAME}"
 repo_incoming="${INCOMING_DIR}/${REPO}/${OS_NAME}/${DIST}/${REPO_COMPONENT}"
@@ -107,3 +108,26 @@ done
 apt-ftparchive release -c ${TMP_DIR}/aptftp.conf dists/${DIST} \
   | tee dists/${DIST}/Release \
   | gzip -c -9 > dists/${DIST}/Release.gz
+
+
+# Sign repository
+
+GPGCMD="gpg --homedir ${TMP_DIR} --no-default-keyring --keyring ${TMP_DIR}/trustedkeys.gpg"
+
+[ -f "${CONF_DIR}/${REPO}/${OS_NAME}_private.gpg" ] || {
+  ${GPGCMD} --batch --passphrase "${PASSWORD}" --quick-gen-key "[MeroLabs] Sign key for ${REPO}-${OS_NAME}" default default never
+  ${GPGCMD} --pinentry-mode loopback --passphrase "${PASSWORD}" --export-secret-keys --armor --output ${CONF_DIR}/${REPO}/${OS_NAME}_private.gpg
+}
+
+cat ${CONF_DIR}/${REPO}/${OS_NAME}_private.gpg | ${GPGCMD} --pinentry-mode loopback --passphrase "${PASSWORD}" --import 2> /dev/null
+
+${GPGCMD} --yes --pinentry-mode loopback --passphrase ${PASSWORD} -bao dists/${DIST}/Release.gpg dists/${DIST}/Release
+${GPGCMD} --yes --clear-sign --output dists/${DIST}/InRelease dists/${DIST}/Release
+
+[ -f "sign-key.gpg" ] || {
+  ${GPGCMD} --pinentry-mode loopback --passphrase "${PASSWORD}" --export --output sign-key.gpg
+}
+
+[ -f "sign-key.gpg.txt" ] || {
+  ${GPGCMD} --pinentry-mode loopback --passphrase "${PASSWORD}" --export --armor --output sign-key.gpg.txt
+}

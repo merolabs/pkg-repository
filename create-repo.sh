@@ -23,6 +23,7 @@ check_mkdir "${CONF_DIR}/${REPO}"
   cat <<EOF>${CONF_DIR}/${REPO}/${OS_NAME}.conf
 ARCH=(all amd64)
 COMPONENT=(main)
+PASSWORD="$(openssl rand -base64 24)"
 EOF
 }
 
