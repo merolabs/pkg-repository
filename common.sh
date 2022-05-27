@@ -16,6 +16,7 @@ function check_mkdir {
 HOME_DIR=$(cd -- ${SCRIPT_DIR} &> /dev/null && cd -- .. && pwd )
 
 KEEP_LAST=10
+VENDOR="MeroLabs"
 
 INCOMING_DIR="${HOME_DIR}/incoming"
 PUBLIC_DIR="${HOME_DIR}/public"

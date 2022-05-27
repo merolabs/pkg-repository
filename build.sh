@@ -70,8 +70,8 @@ find ${repo_archive} -type d -empty -delete
 cat <<EOF>${TMP_DIR}/aptftp.conf
 APT::FTPArchive::DoByHash true;
 APT::FTPArchive::Release {
-  Origin "MeroLabs";
-  Label "MeroLabs APT Repository for ${REPO}";
+  Origin "${VENDOR}";
+  Label "${VENDOR} APT Repository for ${REPO}";
   Suite "stable";
   Architectures "${ARCH[*]}";
   Components "${COMPONENT}";
