@@ -5,7 +5,7 @@ source ${SCRIPT_DIR}/common.sh
 
 set -e -o pipefail
 
-for repo in $(ls -A ${CONF_DIR}/); do
+for repo in $(ls -A ${CONF_DIR}/ | grep -v '.conf'); do
   for os_name_conf in $(ls ${CONF_DIR}/${repo}/*.conf); do
     os_name=$(basename -- ${os_name_conf%.*})
 
